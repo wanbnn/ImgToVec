@@ -11,7 +11,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from src.app import render_document
-from src.search_service import visual_search
+from src.search_service import text_search, visual_search
 
 PUBLIC = Path(__file__).resolve().parents[1] / "public"
 MAX_UPLOAD = 15 * 1024 * 1024
@@ -39,7 +39,7 @@ class AppHandler(BaseHTTPRequestHandler):
             watched = [*PUBLIC.rglob("*"), *PUBLIC.parent.joinpath("src").rglob("*.py")]
             stamp = max((item.stat().st_mtime_ns for item in watched if item.is_file()), default=0)
             return self._send(str(stamp).encode(), "text/plain")
-        if path in {"/app.js", "/styles.css", "/favicon.svg"}:
+        if path in {"/app.js", "/styles.css", "/search-modes.css", "/favicon.svg"}:
             asset = PUBLIC / path[1:]
             return self._send(asset.read_bytes(), mimetypes.guess_type(asset.name)[0] or "application/octet-stream")
         return self._json({"error": "Rota não encontrada"}, 404)
@@ -53,17 +53,28 @@ class AppHandler(BaseHTTPRequestHandler):
         except ValueError:
             return self._json({"error": "Content-Length inválido"}, 400)
         if length < 1 or length > MAX_UPLOAD:
-            return self._json({"error": "A imagem deve ter no máximo 15 MB"}, 413)
+            return self._json({"error": "A requisição deve ter no máximo 15 MB"}, 413)
         content_type = self.headers.get("Content-Type", "")
-        if content_type not in {"image/png", "image/jpeg", "image/webp"}:
-            return self._json({"error": "Formato não suportado. Use PNG, JPG ou WebP"}, 415)
         try:
             limit = min(24, max(1, int(parse_qs(parsed.query).get("limit", ["12"])[0])))
         except ValueError:
             return self._json({"error": "Limite inválido"}, 400)
         started = time.perf_counter()
         try:
-            results = visual_search.search(self.rfile.read(length), limit)
+            body = self.rfile.read(length)
+            if content_type.startswith("application/json"):
+                payload = json.loads(body)
+                query = payload.get("query", "")
+                results = text_search.search(query, limit)
+                search_type = "text"
+            elif content_type in {"image/png", "image/jpeg", "image/webp"}:
+                results = visual_search.search(body, limit)
+                search_type = "image"
+                query = None
+            else:
+                return self._json({"error": "Envie JSON com query ou uma imagem PNG, JPG ou WebP"}, 415)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return self._json({"error": "JSON inválido"}, 400)
         except Exception as error:
             print(f"[search:error] {error}")
             return self._json({"error": str(error)}, 500)
@@ -71,7 +82,12 @@ class AppHandler(BaseHTTPRequestHandler):
             item["image_url"] = f"/api/frames/{item['id']}"
             item["timestamp"] = item["frame"] / item["fps"] if item.get("fps") else None
             item.pop("path", None)
-        return self._json({"results": results, "elapsed_ms": round((time.perf_counter() - started) * 1000)})
+        return self._json({
+            "results": results,
+            "elapsed_ms": round((time.perf_counter() - started) * 1000),
+            "search_type": search_type,
+            "query": query,
+        })
 
     def _json(self, value, status=200):
         self._send(json.dumps(value, ensure_ascii=False).encode(), "application/json; charset=utf-8", status)

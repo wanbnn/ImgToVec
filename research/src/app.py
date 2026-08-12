@@ -24,6 +24,7 @@ def render_document(*, live_reload=False):
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/search-modes.css">
     <script src="/app.js" defer></script>
     {reload_script}
   </head>

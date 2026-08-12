@@ -1,6 +1,6 @@
 # Research
 
-Playground de busca reversa visual. Uma imagem enviada é codificada com `nomic-embed-vision-v1.5` e comparada por distância cosseno com os frames armazenados no PostgreSQL/pgvector.
+Playground de busca reversa visual e textual. Uma imagem enviada é codificada com `nomic-embed-vision-v1.5`; uma descrição é codificada com `nomic-embed-text-v1.5` pelo llama.cpp. Ambos são comparados por distância cosseno com os frames armazenados no PostgreSQL/pgvector.
 
 ## Stack
 
@@ -30,6 +30,8 @@ Acesse <http://127.0.0.1:3000>.
 3. O Nomic Vision gera um embedding L2-normalizado de 768 dimensões.
 4. O pgvector ordena os frames com o operador de distância cosseno `<=>`.
 5. A API expõe somente arquivos de frames registrados no banco e contidos em `Done/`.
+
+No modo Texto, o Research inicia automaticamente o `llama-server` local na porta `8081`, adiciona o prefixo `search_query:` e reutiliza o processo nas consultas seguintes. A porta pode ser alterada com `LLAMA_EMBED_PORT`.
 
 Somente os frames já vetorizados podem aparecer nos resultados. Para completar o acervo, execute na raiz:
 

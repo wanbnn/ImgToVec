@@ -34,9 +34,15 @@ def App(_props):
                     Stack(
                         h(
                             "div",
+                            {"className": "search-modes", "role": "tablist", "aria-label": "Tipo de busca"},
+                            h("button", {"className": "mode-button is-active", "data-mode": "image", "role": "tab", "aria-selected": "true"}, Icon("image", 17), "Imagem"),
+                            h("button", {"className": "mode-button", "data-mode": "text", "role": "tab", "aria-selected": "false"}, Icon("text-search", 17), "Texto"),
+                        ),
+                        h(
+                            "div",
                             {"className": "panel-heading"},
                             h("span", {"className": "step"}, "01"),
-                            h("div", None, h("strong", None, "Imagem de referência"), h("small", None, "PNG, JPG ou WebP · até 15 MB")),
+                            h("div", None, h("strong", {"id": "input-title"}, "Imagem de referência"), h("small", {"id": "input-help"}, "PNG, JPG ou WebP · até 15 MB")),
                         ),
                         h(
                             "label",
@@ -44,6 +50,18 @@ def App(_props):
                             h("input", {"id": "image-input", "type": "file", "accept": "image/png,image/jpeg,image/webp", "hidden": True}),
                             h("img", {"id": "query-preview", "className": "query-preview", "alt": "Prévia da imagem enviada", "hidden": True}),
                             h("div", {"id": "drop-copy", "className": "drop-copy"}, h("span", {"className": "upload-icon"}, Icon("image-up", 30)), h("strong", None, "Arraste uma imagem aqui"), h("span", None, "ou clique para selecionar")),
+                        ),
+                        h(
+                            "div",
+                            {"className": "query-panel", "id": "query-panel", "hidden": True},
+                            h("span", {"className": "query-icon"}, Icon("scan-search", 28)),
+                            h("textarea", {"id": "text-query", "maxlength": "1000", "rows": "5", "placeholder": "Ex.: um homem de terno olhando para um espelho", "aria-label": "Descrição da imagem procurada"}),
+                            h("div", {"className": "query-suggestions"},
+                              h("span", None, "Sugestões:"),
+                              h("button", {"data-query": "uma pessoa usando terno escuro"}, "pessoa de terno"),
+                              h("button", {"data-query": "duas pessoas conversando em frente a um espelho"}, "conversa no espelho"),
+                              h("button", {"data-query": "uma cena interna com iluminação escura"}, "cena interna"),
+                            ),
                         ),
                         h(
                             "div",

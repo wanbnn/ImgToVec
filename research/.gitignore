@@ -1,6 +1,7 @@
 .venv/
 __pycache__/
 *.py[cod]
+.llama-server.log
 .pytest_cache/
 .coverage
 htmlcov/

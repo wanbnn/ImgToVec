@@ -11,3 +11,4 @@ def test_public_assets_exist():
     assert PUBLIC == Path(__file__).resolve().parents[1] / "public"
     assert (PUBLIC / "app.js").is_file()
     assert (PUBLIC / "styles.css").is_file()
+    assert (PUBLIC / "search-modes.css").is_file()

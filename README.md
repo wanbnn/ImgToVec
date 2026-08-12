@@ -245,7 +245,12 @@ prpm install
 prpm run dev
 ```
 
-Abra <http://127.0.0.1:3000>, envie uma imagem e escolha quantos vizinhos deseja retornar. A primeira busca carrega o encoder na GPU; as seguintes reutilizam o modelo residente.
+Abra <http://127.0.0.1:3000> e escolha um dos modos:
+
+- **Imagem:** envie uma referência PNG, JPG ou WebP.
+- **Texto:** descreva a cena desejada, por exemplo `um homem de terno olhando para um espelho`.
+
+A busca textual inicia automaticamente o `llama-server`, aplica o prefixo `search_query:` exigido pelo Nomic e compara o vetor textual com os embeddings visuais. A primeira busca carrega o encoder correspondente na GPU; as seguintes reutilizam o modelo residente.
 
 O endpoint principal é:
 
@@ -253,6 +258,14 @@ O endpoint principal é:
 POST /api/search?limit=12
 Content-Type: image/png | image/jpeg | image/webp
 Body: bytes da imagem
+```
+
+Busca textual:
+
+```text
+POST /api/search?limit=12
+Content-Type: application/json
+Body: {"query": "uma pessoa usando terno escuro"}
 ```
 
 ## Estrutura

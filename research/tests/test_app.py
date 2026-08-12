@@ -7,6 +7,8 @@ def test_app_uses_research_interface():
     assert 'id="image-input"' in html
     assert 'id="results-grid"' in html
     assert "Visual similarity engine" in html
+    assert 'data-mode="text"' in html
+    assert 'id="text-query"' in html
 
 
 def test_document_loads_assets():

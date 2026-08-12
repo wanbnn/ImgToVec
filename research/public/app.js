@@ -9,6 +9,12 @@
   const grid = document.querySelector('#results-grid');
   const meta = document.querySelector('#search-meta');
   const toast = document.querySelector('#toast');
+  const modeButtons = [...document.querySelectorAll('[data-mode]')];
+  const queryPanel = document.querySelector('#query-panel');
+  const textQuery = document.querySelector('#text-query');
+  const inputTitle = document.querySelector('#input-title');
+  const inputHelp = document.querySelector('#input-help');
+  let mode = 'image';
   let selected = null;
   let previewUrl = null;
   let toastTimer;
@@ -36,6 +42,24 @@
   };
 
   input.addEventListener('change', () => choose(input.files[0]));
+  const syncButton = () => { button.disabled = mode === 'image' ? !selected : !textQuery.value.trim(); };
+  modeButtons.forEach((modeButton) => modeButton.addEventListener('click', () => {
+    mode = modeButton.dataset.mode;
+    modeButtons.forEach((item) => {
+      item.classList.toggle('is-active', item === modeButton);
+      item.setAttribute('aria-selected', item === modeButton ? 'true' : 'false');
+    });
+    dropzone.hidden = mode !== 'image';
+    queryPanel.hidden = mode !== 'text';
+    inputTitle.textContent = mode === 'image' ? 'Imagem de referência' : 'Descrição da cena';
+    inputHelp.textContent = mode === 'image' ? 'PNG, JPG ou WebP · até 15 MB' : 'Busca semântica em linguagem natural · até 1000 caracteres';
+    syncButton();
+    if (mode === 'text') textQuery.focus();
+  }));
+  textQuery.addEventListener('input', syncButton);
+  document.querySelectorAll('[data-query]').forEach((item) => item.addEventListener('click', () => {
+    textQuery.value = item.dataset.query; syncButton(); textQuery.focus();
+  }));
   ['dragenter', 'dragover'].forEach((name) => dropzone.addEventListener(name, (event) => {
     event.preventDefault(); dropzone.classList.add('is-dragging');
   }));
@@ -67,7 +91,8 @@
   };
 
   button.addEventListener('click', async () => {
-    if (!selected) return;
+    if (mode === 'image' && !selected) return;
+    if (mode === 'text' && !textQuery.value.trim()) return;
     button.disabled = true;
     button.classList.add('is-loading');
     button.querySelector('span').textContent = 'Vetorizando…';
@@ -75,13 +100,14 @@
     section.hidden = false;
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     try {
-      const response = await fetch(`/api/search?limit=${limit.value}`, {
-        method: 'POST', headers: { 'Content-Type': selected.type }, body: selected,
-      });
+      const request = mode === 'image'
+        ? { method: 'POST', headers: { 'Content-Type': selected.type }, body: selected }
+        : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: textQuery.value.trim() }) };
+      const response = await fetch(`/api/search?limit=${limit.value}`, request);
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || 'A busca falhou');
       grid.innerHTML = payload.results.map(resultCard).join('') || '<p class="empty">Nenhum frame vetorizado foi encontrado.</p>';
-      meta.textContent = `${payload.results.length} resultados · ${payload.elapsed_ms} ms`;
+      meta.textContent = `${payload.search_type === 'text' ? 'texto' : 'imagem'} · ${payload.results.length} resultados · ${payload.elapsed_ms} ms`;
     } catch (error) {
       grid.innerHTML = '<p class="empty">Não foi possível concluir esta busca.</p>';
       showToast(error.message, true);
