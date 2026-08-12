@@ -1,0 +1,39 @@
+[project]
+name = "research"
+version = "0.1.0"
+description = "Playground de busca reversa de imagens com PyReact e pgvector"
+requires-python = ">=3.11"
+dependencies = [
+    "pyreact-framework>=1.0.5",
+    "uikitpr>=0.3.2",
+    "6cons>=0.1",
+    "Pillow>=10,<13",
+    "psycopg[binary]>=3.2,<4",
+    "transformers>=4.57,<5",
+    "huggingface-hub>=0.34,<1",
+    "safetensors>=0.5",
+    "einops>=0.8,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.pyreact]
+entry = "src/app.py"
+output = "dist"
+dev_port = 3000
+ssr = true
+css_modules = false
+source_maps = true
+
+[tool.prpm.scripts]
+dev = "python -m src.server"
+build = "python -m src.build"
+test = "python -m pytest"
+generate = "pyreact generate"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

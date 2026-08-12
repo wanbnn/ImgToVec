@@ -1,0 +1,14 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.cache/
+Models/.huggingface/
+Models/*
+!Models/.gitkeep
+Done/
+llama.cpp/
+sample.mp4
+research/.venv/
+research/.pytest_cache/
+research/dist/

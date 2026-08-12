@@ -1,0 +1,327 @@
+{
+  "lockVersion": 1,
+  "generatedAt": "2026-08-12T00:20:54.350381+00:00",
+  "python": "3.13.15",
+  "contentHash": "sha256:3c540f495f002f9a44f7ce58bb9ae7b01729785e25145301f36ff34a4862fe99",
+  "packages": [
+    {
+      "name": "6cons",
+      "version": "0.1.0",
+      "direct": true,
+      "dev": false,
+      "requirement": "6cons==0.1.0",
+      "url": "https://files.pythonhosted.org/packages/bc/91/9ee37eaa0267583c5571dac17e8acc8ba4885cccd49a165aabf7e03f1dc5/6cons-0.1.0-py3-none-any.whl",
+      "hashes": [
+        "4986d6c0047b1d33b6df2dbf02a99ef29c3d5d85d072e3152b56aac2851c2d48"
+      ]
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22",
+      "direct": false,
+      "dev": false,
+      "requirement": "certifi==2026.7.22",
+      "url": "https://files.pythonhosted.org/packages/0b/a7/71ac2cff56fec219ed242bb11b8efb69fcc4bec75db06fb7bfe35de520e6/certifi-2026.7.22-py3-none-any.whl",
+      "hashes": [
+        "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775"
+      ]
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.4.9",
+      "direct": false,
+      "dev": false,
+      "requirement": "charset-normalizer==3.4.9",
+      "url": "https://files.pythonhosted.org/packages/f4/c4/b3e049d2aa3766180c78507110543d9d50894cc97f57de543f1be521dcdc/charset_normalizer-3.4.9-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "hashes": [
+        "c25fe15c70c59eb7c5ce8c06a1f3fa1da0ecc5ea1e7a5922c40fd2fa9b0d5046"
+      ]
+    },
+    {
+      "name": "einops",
+      "version": "0.8.2",
+      "direct": true,
+      "dev": false,
+      "requirement": "einops==0.8.2",
+      "url": "https://files.pythonhosted.org/packages/2a/09/f8d8f8f31e4483c10a906437b4ce31bdf3d6d417b73fe33f1a8b59e34228/einops-0.8.2-py3-none-any.whl",
+      "hashes": [
+        "54058201ac7087911181bfec4af6091bb59380360f069276601256a76af08193"
+      ]
+    },
+    {
+      "name": "filelock",
+      "version": "3.32.2",
+      "direct": false,
+      "dev": false,
+      "requirement": "filelock==3.32.2",
+      "url": "https://files.pythonhosted.org/packages/c1/e8/72f8cef9fdfeffe06213fe8508039396ee48daa0e3259457ed766173bfd6/filelock-3.32.2-py3-none-any.whl",
+      "hashes": [
+        "87dd94cf281e586d135fa51132b8e3d9a598b316e90377a288663c9321036c82"
+      ]
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.7.0",
+      "direct": false,
+      "dev": false,
+      "requirement": "fsspec==2026.7.0",
+      "url": "https://files.pythonhosted.org/packages/fd/3c/6a2bf344106328fd04963664a60b9bb6496fc25df8e962fcdc1367285fb9/fsspec-2026.7.0-py3-none-any.whl",
+      "hashes": [
+        "b57ddbafedfaef7018c1ecab32aa200a9d7ca26b77965f64e48b70061249d279"
+      ]
+    },
+    {
+      "name": "hf-xet",
+      "version": "1.6.0",
+      "direct": false,
+      "dev": false,
+      "requirement": "hf-xet==1.6.0",
+      "url": "https://files.pythonhosted.org/packages/67/4e/a28359bf1c1ecf11eba22123168c138698f7cb576ac678f5a2e16cd5da08/hf_xet-1.6.0-cp38-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "hashes": [
+        "d62671bb130879cef0ee4c9ebe47a14af6c66ec53e6d84dc15936e5ffdfac82f"
+      ]
+    },
+    {
+      "name": "huggingface_hub",
+      "version": "0.36.2",
+      "direct": true,
+      "dev": false,
+      "requirement": "huggingface_hub==0.36.2",
+      "url": "https://files.pythonhosted.org/packages/a8/af/48ac8483240de756d2438c380746e7130d1c6f75802ef22f3c6d49982787/huggingface_hub-0.36.2-py3-none-any.whl",
+      "hashes": [
+        "48f0c8eac16145dfce371e9d2d7772854a4f591bcb56c9cf548accf531d54270"
+      ]
+    },
+    {
+      "name": "idna",
+      "version": "3.18",
+      "direct": false,
+      "dev": false,
+      "requirement": "idna==3.18",
+      "url": "https://files.pythonhosted.org/packages/1e/5e/d4e9f1a599fb8e573b7b87160658329fbf28d19eac2718f51fc3def3aa5a/idna-3.18-py3-none-any.whl",
+      "hashes": [
+        "7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2"
+      ]
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "direct": false,
+      "dev": true,
+      "requirement": "iniconfig==2.3.0",
+      "url": "https://files.pythonhosted.org/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl",
+      "hashes": [
+        "f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12"
+      ]
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.2",
+      "direct": false,
+      "dev": false,
+      "requirement": "numpy==2.5.2",
+      "url": "https://files.pythonhosted.org/packages/c7/99/461bd36dbdfac6c1c53efa370bd55a83227542d0d118f1677dbf1a3dacd5/numpy-2.5.2-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "hashes": [
+        "318b9a4c845dbea06708a29c84ee429cc3065048db34cdb799047643492050ee"
+      ]
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "direct": false,
+      "dev": false,
+      "requirement": "packaging==26.3",
+      "url": "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl",
+      "hashes": [
+        "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
+      ]
+    },
+    {
+      "name": "pillow",
+      "version": "12.3.0",
+      "direct": true,
+      "dev": false,
+      "requirement": "pillow==12.3.0",
+      "url": "https://files.pythonhosted.org/packages/5c/44/c85361f65dbe00eea8576ee467c768d25129989efb76e94f205e9ca9bb46/pillow-12.3.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "hashes": [
+        "251bf95b67017e27b13d82f5b326234ca62d70f9cf4c2b9032de2358a3b12c7b"
+      ]
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0",
+      "direct": false,
+      "dev": true,
+      "requirement": "pluggy==1.6.0",
+      "url": "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl",
+      "hashes": [
+        "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746"
+      ]
+    },
+    {
+      "name": "psycopg",
+      "version": "3.3.4",
+      "direct": true,
+      "dev": false,
+      "requirement": "psycopg==3.3.4",
+      "url": "https://files.pythonhosted.org/packages/5c/e0/7b3dee031daae7743609ce3c746565d4a3ed7c2c186479eb48e34e838c64/psycopg-3.3.4-py3-none-any.whl",
+      "hashes": [
+        "b6bbc25ccf05c8fad3b061d9db2ef0909a555171b84b07f29458a447253d679a"
+      ]
+    },
+    {
+      "name": "psycopg-binary",
+      "version": "3.3.4",
+      "direct": false,
+      "dev": false,
+      "requirement": "psycopg-binary==3.3.4",
+      "url": "https://files.pythonhosted.org/packages/8f/26/42e8533497e2592334f68ec529cf5f840f7fa4e99575a4bb61aa184dbfbf/psycopg_binary-3.3.4-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "hashes": [
+        "8c0056529e68dbe9184cd4019a1f3d8f3a4ead2f6fc7a5afcf27d3314edd1277"
+      ]
+    },
+    {
+      "name": "Pygments",
+      "version": "2.20.0",
+      "direct": false,
+      "dev": true,
+      "requirement": "Pygments==2.20.0",
+      "url": "https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl",
+      "hashes": [
+        "81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176"
+      ]
+    },
+    {
+      "name": "pyreact-framework",
+      "version": "1.0.5.post3028994678301",
+      "direct": true,
+      "dev": false,
+      "requirement": "pyreact-framework==1.0.5.post3028994678301",
+      "url": "https://files.pythonhosted.org/packages/43/ed/c35111a7f4f2144e2481be22258721ddb0ddaf456c7baa12b18a0e5c7d36/pyreact_framework-1.0.5.post3028994678301-py3-none-any.whl",
+      "hashes": [
+        "166e3baa4419745b33173020bb0ab2c41d44b740d604c96832144ef069007441"
+      ]
+    },
+    {
+      "name": "pytest",
+      "version": "9.1.1",
+      "direct": true,
+      "dev": true,
+      "requirement": "pytest==9.1.1",
+      "url": "https://files.pythonhosted.org/packages/24/25/1de2678b631f5a49215c6c96fff41ba892b0a34df68d6d80292b1b48aa7f/pytest-9.1.1-py3-none-any.whl",
+      "hashes": [
+        "37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c"
+      ]
+    },
+    {
+      "name": "PyYAML",
+      "version": "6.0.3",
+      "direct": false,
+      "dev": false,
+      "requirement": "PyYAML==6.0.3",
+      "url": "https://files.pythonhosted.org/packages/88/f9/16491d7ed2a919954993e48aa941b200f38040928474c9e85ea9e64222c3/pyyaml-6.0.3-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "hashes": [
+        "c458b6d084f9b935061bc36216e8a69a7e293a2f1e68bf956dcd9e6cbcd143f5"
+      ]
+    },
+    {
+      "name": "regex",
+      "version": "2026.7.19",
+      "direct": false,
+      "dev": false,
+      "requirement": "regex==2026.7.19",
+      "url": "https://files.pythonhosted.org/packages/14/71/986ceea9aa3da548bf1357cad89b63915ec6d21ec957c8113b29ece567df/regex-2026.7.19-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "hashes": [
+        "7322ec6cc9fba9d49ab888bb82d67ac5625627aa168f0165139b17018df3fb8a"
+      ]
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2",
+      "direct": false,
+      "dev": false,
+      "requirement": "requests==2.34.2",
+      "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+      "hashes": [
+        "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0"
+      ]
+    },
+    {
+      "name": "safetensors",
+      "version": "0.8.0",
+      "direct": true,
+      "dev": false,
+      "requirement": "safetensors==0.8.0",
+      "url": "https://files.pythonhosted.org/packages/28/50/f203ff3a3ddfe19308efc83c5a3a29ed02bf786732ec35e68bf9162f3365/safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "hashes": [
+        "fd6f3f93c9a0a7cc2788ee63fb763353d4bd2e89b0751bc78fcf7dda00bea774"
+      ]
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.22.2",
+      "direct": false,
+      "dev": false,
+      "requirement": "tokenizers==0.22.2",
+      "url": "https://files.pythonhosted.org/packages/2e/76/932be4b50ef6ccedf9d3c6639b056a967a86258c6d9200643f01269211ca/tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "hashes": [
+        "369cc9fc8cc10cb24143873a0d95438bb8ee257bb80c71989e3ee290e8d72c67"
+      ]
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.0",
+      "direct": false,
+      "dev": false,
+      "requirement": "tqdm==4.70.0",
+      "url": "https://files.pythonhosted.org/packages/f9/1c/01bfd571a64e7f270e6bab5e33777debe0edc56759233ce84f27dec92d14/tqdm-4.70.0-py3-none-any.whl",
+      "hashes": [
+        "7f585706bfddbdebf89daac705b2dfcc16890130727d3197ca62c732b4310953"
+      ]
+    },
+    {
+      "name": "transformers",
+      "version": "4.57.6",
+      "direct": true,
+      "dev": false,
+      "requirement": "transformers==4.57.6",
+      "url": "https://files.pythonhosted.org/packages/03/b8/e484ef633af3887baeeb4b6ad12743363af7cce68ae51e938e00aaa0529d/transformers-4.57.6-py3-none-any.whl",
+      "hashes": [
+        "4c9e9de11333ddfe5114bc872c9f370509198acf0b87a832a0ab9458e2bd0550"
+      ]
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "direct": false,
+      "dev": false,
+      "requirement": "typing_extensions==4.16.0",
+      "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+      "hashes": [
+        "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+      ]
+    },
+    {
+      "name": "uikitpr",
+      "version": "0.3.2.post3142518377901",
+      "direct": true,
+      "dev": false,
+      "requirement": "uikitpr==0.3.2.post3142518377901",
+      "url": "https://files.pythonhosted.org/packages/99/10/fe7487932fcc5f8d48ab355cc0d0cd42c909bcf395db23fadebdb3aa08d4/uikitpr-0.3.2.post3142518377901-py3-none-any.whl",
+      "hashes": [
+        "39162a88b4980c3fac4e4693ca2408dc263ad5cf63f79833c70547fe7bcd6910"
+      ]
+    },
+    {
+      "name": "urllib3",
+      "version": "2.7.0",
+      "direct": false,
+      "dev": false,
+      "requirement": "urllib3==2.7.0",
+      "url": "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl",
+      "hashes": [
+        "9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897"
+      ]
+    }
+  ]
+}
