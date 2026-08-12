@@ -4,19 +4,86 @@ ImgToVec é um pipeline local de busca visual reversa para vídeos. Ele extrai t
 
 O projeto roda localmente, suporta aceleração por GPU e não precisa enviar as imagens para uma API externa.
 
+## Demonstração
+
+No playground Research, o usuário seleciona ou arrasta uma imagem de referência e escolhe quantos vizinhos deseja recuperar:
+
+![Upload de uma imagem de referência no Research](docs/images/research-upload.png)
+
+O resultado apresenta os frames mais próximos, a similaridade vetorial, o número do frame, a pasta do vídeo e o instante correspondente:
+
+![Resultados da busca visual ordenados por similaridade](docs/images/research-results.png)
+
 ## Como funciona
 
-```text
-Vídeo
-  └─ extract_video_frames.py
-       └─ Done/0001/frame_*.png
-            └─ nomic-embed-vision-v1.5
-                 └─ embeddings vector(768)
-                      └─ PostgreSQL + pgvector + HNSW
-                           └─ Research: upload → busca por cosseno → frames similares
+```mermaid
+flowchart LR
+    VIDEO[Vídeo de entrada] --> EXTRACT[Extração com FFmpeg]
+    EXTRACT --> FRAMES[Frames em Done/000N]
+    FRAMES --> ENCODER[Nomic Embed Vision v1.5]
+    ENCODER --> VECTOR[Embedding normalizado<br/>768 dimensões]
+    VECTOR --> PG[(PostgreSQL + pgvector)]
+    PG --> HNSW[Índice HNSW<br/>distância cosseno]
+
+    QUERY[Imagem de consulta] --> RESEARCH[Playground Research]
+    RESEARCH --> ENCODER
+    HNSW --> RESULTS[Frames visualmente próximos]
+    RESULTS --> RESEARCH
 ```
 
 O `nomic-embed-vision-v1.5` transforma diretamente os pixels em vetores, sem criar legendas. Ele compartilha o espaço vetorial com o `nomic-embed-text-v1.5`, deixando o projeto preparado para buscas texto → imagem além da busca imagem → imagem já implementada.
+
+## Arquitetura
+
+```mermaid
+flowchart TB
+    subgraph CLIENTE[Cliente]
+        BROWSER[Navegador]
+        UPLOAD[Upload PNG, JPG ou WebP]
+        GALLERY[Galeria de resultados]
+        BROWSER --> UPLOAD
+        GALLERY --> BROWSER
+    end
+
+    subgraph WEB[Research]
+        PYREACT[PyReact SSR]
+        UI[UIKitPR + 6cons]
+        API[API HTTP Python]
+        SECURITY[Validação de formato, tamanho e caminhos]
+        PYREACT --- UI
+        API --> SECURITY
+    end
+
+    subgraph INFERENCE[Inferência local]
+        VISION[Nomic Embed Vision v1.5]
+        TORCH[PyTorch]
+        GPU[ROCm, CUDA, Metal ou CPU]
+        VISION --> TORCH --> GPU
+        TEXT[Nomic Embed Text v1.5 GGUF]
+        LLAMA[llama.cpp]
+        TEXT --> LLAMA
+    end
+
+    subgraph STORAGE[Dados]
+        POSTGRES[(PostgreSQL)]
+        PGVECTOR[pgvector]
+        INDEX[HNSW cosine]
+        DONE[Frames em Done/]
+        MIGRATIONS[SQL migrations]
+        POSTGRES --- PGVECTOR --> INDEX
+        MIGRATIONS --> POSTGRES
+    end
+
+    UPLOAD --> API
+    API --> VISION
+    VISION --> API
+    API --> INDEX
+    INDEX --> API
+    API --> SECURITY --> DONE
+    API --> GALLERY
+```
+
+O encoder fica carregado na memória depois da primeira consulta. O PostgreSQL armazena somente os metadados e vetores; os arquivos dos frames continuam em `Done/` e são entregues apenas depois de uma validação contra os registros do banco.
 
 ## Recursos
 
