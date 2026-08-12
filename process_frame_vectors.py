@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Iterable
 
 from db_support import ROOT, apply_migrations, connect, env_int, load_env
-from model_downloads import ensure_all_models
+from model_downloads import ensure_all_models, vision_embedding_id
 
 
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".bmp"}
@@ -161,8 +161,10 @@ def encode_batch(torch, Image, processor, model, device: str, paths: list[Path])
         inputs = {key: value.to(device) for key, value in inputs.items()}
         with torch.inference_mode():
             output = model(**inputs).last_hidden_state
-            if output.ndim == 3:
-                output = output.mean(dim=1)
+            if output.ndim != 3:
+                raise RuntimeError(f"Saída visual inesperada: {tuple(output.shape)}")
+            # Receita oficial do Nomic Vision: token CLS, depois norma L2.
+            output = output[:, 0]
             output = torch.nn.functional.normalize(output, p=2, dim=1)
         return output.detach().float().cpu().tolist()
     finally:
@@ -197,12 +199,13 @@ def update_video_states(connection, model_name: str) -> None:
                 completed_at = CASE WHEN summary.done = summary.total AND summary.total > 0 THEN now() ELSE NULL END,
                 updated_at = now()
             FROM (
-                SELECT video_id, count(*) AS total, count(embedding) AS done
+                SELECT video_id, count(*) AS total,
+                       count(*) FILTER (WHERE embedding IS NOT NULL AND embedding_model = %s) AS done
                 FROM frames GROUP BY video_id
             ) summary
             WHERE v.id = summary.video_id
             """,
-            (model_name,),
+            (model_name, model_name),
         )
     connection.commit()
 
@@ -218,7 +221,8 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     load_env()
-    _, model_name, model_path = ensure_all_models()
+    _, vision_repo, model_path = ensure_all_models()
+    model_name = vision_embedding_id(vision_repo)
     batch_size = env_int("FRAME_BATCH_SIZE", 16)
     expected_dim = env_int("EMBEDDING_DIM", 768)
     if expected_dim != 768:

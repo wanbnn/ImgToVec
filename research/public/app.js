@@ -107,7 +107,7 @@
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || 'A busca falhou');
       grid.innerHTML = payload.results.map(resultCard).join('') || '<p class="empty">Nenhum frame vetorizado foi encontrado.</p>';
-      meta.textContent = `${payload.search_type === 'text' ? 'texto' : 'imagem'} · ${payload.results.length} resultados · ${payload.elapsed_ms} ms`;
+      meta.textContent = `${payload.search_type === 'text' ? (payload.translated ? 'texto · traduzido para inglês' : 'texto') : 'imagem'} · ${payload.results.length} resultados · ${payload.elapsed_ms} ms`;
     } catch (error) {
       grid.innerHTML = '<p class="empty">Não foi possível concluir esta busca.</p>';
       showToast(error.message, true);

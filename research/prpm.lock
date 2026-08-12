@@ -1,8 +1,8 @@
 {
   "lockVersion": 1,
-  "generatedAt": "2026-08-12T00:20:54.350381+00:00",
+  "generatedAt": "2026-08-12T01:06:49.298117+00:00",
   "python": "3.13.15",
-  "contentHash": "sha256:3c540f495f002f9a44f7ce58bb9ae7b01729785e25145301f36ff34a4862fe99",
+  "contentHash": "sha256:10421995c418c50805e084622ef74dfac9349a6086c42872ebee306a3a35a21c",
   "packages": [
     {
       "name": "6cons",
@@ -112,6 +112,17 @@
       "url": "https://files.pythonhosted.org/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl",
       "hashes": [
         "f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12"
+      ]
+    },
+    {
+      "name": "langdetect",
+      "version": "1.0.9",
+      "direct": true,
+      "dev": false,
+      "requirement": "langdetect==1.0.9",
+      "url": "https://files.pythonhosted.org/packages/0e/72/a3add0e4eec4eb9e2569554f7c70f4a3c27712f40e3284d483e88094cc0e/langdetect-1.0.9.tar.gz",
+      "hashes": [
+        "cbc1fef89f8d062739774bd51eda3da3274006b3661d199c2655f6b3f6d605a0"
       ]
     },
     {
@@ -255,6 +266,28 @@
       "url": "https://files.pythonhosted.org/packages/28/50/f203ff3a3ddfe19308efc83c5a3a29ed02bf786732ec35e68bf9162f3365/safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
       "hashes": [
         "fd6f3f93c9a0a7cc2788ee63fb763353d4bd2e89b0751bc78fcf7dda00bea774"
+      ]
+    },
+    {
+      "name": "sentencepiece",
+      "version": "0.2.2",
+      "direct": true,
+      "dev": false,
+      "requirement": "sentencepiece==0.2.2",
+      "url": "https://files.pythonhosted.org/packages/24/b3/718847349da7b25c8220ed86d85b89080af94740b2d87a59198104ae5c51/sentencepiece-0.2.2-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "hashes": [
+        "8d44b20234905ff022b7d535f79d1f823ad7670c9851cc4f03cdc34787cdb3ab"
+      ]
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "direct": false,
+      "dev": false,
+      "requirement": "six==1.17.0",
+      "url": "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl",
+      "hashes": [
+        "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
       ]
     },
     {

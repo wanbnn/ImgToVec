@@ -33,6 +33,8 @@ Acesse <http://127.0.0.1:3000>.
 
 No modo Texto, o Research inicia automaticamente o `llama-server` local na porta `8081`, adiciona o prefixo `search_query:` e reutiliza o processo nas consultas seguintes. A porta pode ser alterada com `LLAMA_EMBED_PORT`.
 
+Consultas em português são detectadas e traduzidas localmente para inglês com `Helsinki-NLP/opus-mt-ROMANCE-en`. O tradutor é baixado automaticamente para `Models/`. Os frames usam CLS + L2; as consultas usam mean pooling + LayerNorm + L2.
+
 Somente os frames já vetorizados podem aparecer nos resultados. Para completar o acervo, execute na raiz:
 
 ```bash

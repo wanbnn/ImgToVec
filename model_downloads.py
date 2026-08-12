@@ -14,6 +14,13 @@ MODELS_DIR = ROOT / "Models"
 DEFAULT_TEXT_REPO = "nomic-ai/nomic-embed-text-v1.5-GGUF"
 DEFAULT_TEXT_FILE = "nomic-embed-text-v1.5.Q4_K_M.gguf"
 DEFAULT_VISION_REPO = "nomic-ai/nomic-embed-vision-v1.5"
+DEFAULT_TRANSLATION_REPO = "Helsinki-NLP/opus-mt-ROMANCE-en"
+VISION_EMBED_PIPELINE_VERSION = "cls-l2-v2"
+
+
+def vision_embedding_id(repo: str) -> str:
+    """Identificador persistido; muda quando o pré-processamento muda."""
+    return f"{repo}@{VISION_EMBED_PIPELINE_VERSION}"
 
 
 def normalize_vision_config(destination: Path) -> None:
@@ -84,6 +91,28 @@ def ensure_vision_model() -> tuple[str, Path]:
     if missing:
         raise RuntimeError(f"Download visual incompleto; arquivos ausentes: {', '.join(missing)}")
     normalize_vision_config(destination)
+    return repo, destination
+
+
+def ensure_translation_model() -> tuple[str, Path]:
+    repo = os.environ.get("TRANSLATION_MODEL", DEFAULT_TRANSLATION_REPO)
+    configured_dir = os.environ.get("TRANSLATION_MODEL_DIR", "Models/opus-mt-ROMANCE-en")
+    destination = resolve_project_path(configured_dir)
+    required = (destination / "config.json", destination / "tokenizer_config.json")
+    weights_present = any(destination.glob("*.safetensors")) or any(destination.glob("pytorch_model*.bin"))
+    if all(path.is_file() for path in required) and weights_present:
+        print(f"Tradutor disponível: {destination}")
+        return repo, destination
+    destination.mkdir(parents=True, exist_ok=True)
+    _, snapshot_download = huggingface_api()
+    print(f"Baixando tradutor {repo} para {destination}...")
+    snapshot_download(
+        repo_id=repo,
+        local_dir=destination,
+        allow_patterns=["*.json", "*.safetensors", "pytorch_model*.bin", "*.model", "*.spm", "*.txt"],
+    )
+    if not all(path.is_file() for path in required):
+        raise RuntimeError(f"Download do tradutor incompleto em {destination}")
     return repo, destination
 
 

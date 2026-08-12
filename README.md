@@ -33,6 +33,8 @@ flowchart LR
 
 O `nomic-embed-vision-v1.5` transforma diretamente os pixels em vetores, sem criar legendas. Ele compartilha o espaço vetorial com o `nomic-embed-text-v1.5`, deixando o projeto preparado para buscas texto → imagem além da busca imagem → imagem já implementada.
 
+O pipeline segue o pré-processamento oficial do Nomic: imagens usam o token CLS + normalização L2; textos usam mean pooling + LayerNorm + normalização L2. Consultas detectadas como português são traduzidas localmente para inglês antes da vetorização.
+
 ## Arquitetura
 
 ```mermaid
@@ -237,6 +239,14 @@ Teste limitado:
 
 O processador pode ser interrompido e retomado. Pastas concluídas com o mesmo encoder são ignoradas, e frames alterados são detectados pelo hash.
 
+Se a versão do pré-processamento mudar, o identificador persistido também muda e os frames antigos voltam automaticamente ao estado pendente. Depois de atualizar o projeto para a versão CLS, execute novamente:
+
+```bash
+./process_frame_vectors.py
+```
+
+É necessário reprocessar todo o acervo; o Research não mistura embeddings antigos com os vetores CLS novos.
+
 ## 6. Executar o Research
 
 ```bash
@@ -251,6 +261,8 @@ Abra <http://127.0.0.1:3000> e escolha um dos modos:
 - **Texto:** descreva a cena desejada, por exemplo `um homem de terno olhando para um espelho`.
 
 A busca textual inicia automaticamente o `llama-server`, aplica o prefixo `search_query:` exigido pelo Nomic e compara o vetor textual com os embeddings visuais. A primeira busca carrega o encoder correspondente na GPU; as seguintes reutilizam o modelo residente.
+
+Quando a descrição está em português, o Research detecta o idioma e usa localmente `Helsinki-NLP/opus-mt-ROMANCE-en`. A tradução e o texto efetivamente vetorizado são devolvidos pela API; nenhum serviço externo recebe a consulta.
 
 O endpoint principal é:
 

@@ -65,12 +65,14 @@ class AppHandler(BaseHTTPRequestHandler):
             if content_type.startswith("application/json"):
                 payload = json.loads(body)
                 query = payload.get("query", "")
-                results = text_search.search(query, limit)
+                results, embedded_query, translated = text_search.search(query, limit)
                 search_type = "text"
             elif content_type in {"image/png", "image/jpeg", "image/webp"}:
                 results = visual_search.search(body, limit)
                 search_type = "image"
                 query = None
+                embedded_query = None
+                translated = False
             else:
                 return self._json({"error": "Envie JSON com query ou uma imagem PNG, JPG ou WebP"}, 415)
         except (json.JSONDecodeError, UnicodeDecodeError):
@@ -87,6 +89,8 @@ class AppHandler(BaseHTTPRequestHandler):
             "elapsed_ms": round((time.perf_counter() - started) * 1000),
             "search_type": search_type,
             "query": query,
+            "embedded_query": embedded_query,
+            "translated": translated,
         })
 
     def _json(self, value, status=200):

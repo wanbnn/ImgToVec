@@ -4,6 +4,8 @@ transformers>=4.57,<5
 safetensors>=0.5
 huggingface-hub>=0.28,<2
 einops>=0.8,<1
+sentencepiece>=0.2,<1
+langdetect>=1.0.9,<2
 
 # Instale PyTorch separadamente conforme seu backend (ROCm, CUDA, Metal ou CPU).
 # O AutoImageProcessor também requer Torchvision compatível.

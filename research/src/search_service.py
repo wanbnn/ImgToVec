@@ -20,7 +20,11 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from db_support import connect, load_env  # noqa: E402
-from model_downloads import ensure_all_models  # noqa: E402
+from model_downloads import (  # noqa: E402
+    ensure_all_models,
+    ensure_translation_model,
+    vision_embedding_id,
+)
 from process_frame_vectors import load_encoder  # noqa: E402
 
 
@@ -60,7 +64,8 @@ class VisualSearch:
 
     def _load(self):
         if self._encoder is None:
-            _, self.model_name, model_path = ensure_all_models()
+            _, vision_repo, model_path = ensure_all_models()
+            self.model_name = vision_embedding_id(vision_repo)
             self._encoder = load_encoder(model_path, "auto")
         return self._encoder
 
@@ -72,8 +77,9 @@ class VisualSearch:
         inputs = {key: value.to(device) for key, value in inputs.items()}
         with self._lock, torch.inference_mode():
             output = model(**inputs).last_hidden_state
-            if output.ndim == 3:
-                output = output.mean(dim=1)
+            if output.ndim != 3:
+                raise RuntimeError(f"Saída visual inesperada: {tuple(output.shape)}")
+            output = output[:, 0]
             output = torch.nn.functional.normalize(output, p=2, dim=1)
         vector = output[0].detach().float().cpu().tolist()
         if len(vector) != 768:
@@ -107,6 +113,7 @@ class TextSearch:
         self._process = None
         self._model_path = None
         self._vision_model_name = None
+        self._translator = None
         self.port = int(os.environ.get("LLAMA_EMBED_PORT", "8081"))
         atexit.register(self.close)
 
@@ -142,6 +149,7 @@ class TextSearch:
 
     def _start(self):
         text_model, self._vision_model_name, _ = ensure_all_models()
+        self._vision_model_name = vision_embedding_id(self._vision_model_name)
         self._model_path = text_model
         if self._healthy():
             return
@@ -162,17 +170,48 @@ class TextSearch:
             time.sleep(.25)
         raise RuntimeError("llama-server não ficou pronto em 30 segundos")
 
-    def encode(self, query: str) -> list[float]:
+    def _translate_if_portuguese(self, query: str) -> tuple[str, bool]:
+        try:
+            from langdetect import DetectorFactory, LangDetectException, detect
+        except ImportError as error:
+            raise RuntimeError("Dependência langdetect ausente; execute prpm install") from error
+        DetectorFactory.seed = 0
+        try:
+            language = detect(query)
+        except LangDetectException:
+            language = "unknown"
+        if language != "pt":
+            return query, False
+
+        if self._translator is None:
+            try:
+                import torch
+                from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+            except ImportError as error:
+                raise RuntimeError("Dependências do tradutor ausentes; execute prpm install") from error
+            _, path = ensure_translation_model()
+            tokenizer = AutoTokenizer.from_pretrained(str(path), local_files_only=True)
+            model = AutoModelForSeq2SeqLM.from_pretrained(str(path), local_files_only=True).eval()
+            self._translator = (torch, tokenizer, model)
+        torch, tokenizer, model = self._translator
+        inputs = tokenizer([query], return_tensors="pt", truncation=True, max_length=512)
+        with torch.inference_mode():
+            translated = model.generate(**inputs, num_beams=4, max_new_tokens=256)
+        english = tokenizer.batch_decode(translated, skip_special_tokens=True)[0].strip()
+        return english or query, True
+
+    def encode(self, query: str) -> tuple[list[float], str, bool]:
         query = " ".join(query.split()).strip()
         if not query:
             raise ValueError("Digite uma descrição para pesquisar")
         if len(query) > 1000:
             raise ValueError("A consulta deve ter no máximo 1000 caracteres")
         with self._lock:
+            embedded_query, translated = self._translate_if_portuguese(query)
             self._start()
             response = self._request(
                 "/v1/embeddings",
-                {"model": "nomic-embed-text-v1.5", "input": f"search_query: {query}", "encoding_format": "float"},
+                {"model": "nomic-embed-text-v1.5", "input": f"search_query: {embedded_query}", "encoding_format": "float"},
                 timeout=30,
             )
         vector = response["data"][0]["embedding"]
@@ -184,11 +223,11 @@ class TextSearch:
         variance = sum((value - mean) ** 2 for value in vector) / len(vector)
         layer_norm = [(value - mean) / math.sqrt(variance + 1e-5) for value in vector]
         norm = math.sqrt(sum(value * value for value in layer_norm))
-        return [value / norm for value in layer_norm]
+        return [value / norm for value in layer_norm], embedded_query, translated
 
-    def search(self, query: str, limit: int) -> list[dict]:
-        vector = self.encode(query)
-        return search_database(vector, self._vision_model_name, limit)
+    def search(self, query: str, limit: int) -> tuple[list[dict], str, bool]:
+        vector, embedded_query, translated = self.encode(query)
+        return search_database(vector, self._vision_model_name, limit), embedded_query, translated
 
     def close(self):
         if self._process and self._process.poll() is None:
